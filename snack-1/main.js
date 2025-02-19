@@ -6,21 +6,32 @@
 
 
 
-const getPostTitle = id => {
-    const promise = new Promise((resolve, reject) => {
-
+const getPost = (id) => {
+    return new Promise((resolve, reject) => {
         fetch(`https://dummyjson.com/posts/${id}`)
             .then(response => response.json())
-            .then(data => resolve(data.title))
-            .catch(reject)
+            .then(post => {
 
-    })
-    return promise
+                fetch(`https://dummyjson.com/users/${post.userId}`)
+                    .then(response => response.json())
+                    .then(userData => {
+
+                        post.user = userData;
+                        resolve(post);
+                    })
+                    .catch(reject);
+            })
+            .catch(reject);
+    });
 }
 
-getPostTitle(2)
-    .then(data => console.log(`Title: ${data}`))
-    .catch(error => console.error(error))
+getPost(1)
+    .then(data => console.log(`
+        Title: ${data.title}
+        Body: ${data.body}
+        Tags: ${data.tags}
+        User: ${data.userId}`))
+    .catch(error => console.error(error));
 
 
 
