@@ -16,8 +16,12 @@ const getPost = (id) => {
                     .then(response => response.json())
                     .then(userData => {
 
-                        post.user = userData;
-                        resolve(post);
+                        const result = {
+                            ...post,
+                            userData
+                        }
+                        resolve(result);
+
                     })
                     .catch(reject);
             })
@@ -26,11 +30,7 @@ const getPost = (id) => {
 }
 
 getPost(1)
-    .then(data => console.log(`
-        Title: ${data.title}
-        Body: ${data.body}
-        Tags: ${data.tags}
-        User: ${data.userId}`))
+    .then(data => console.log(`Post`, data))
     .catch(error => console.error(error));
 
 
